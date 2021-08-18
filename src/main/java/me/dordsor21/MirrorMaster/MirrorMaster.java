@@ -11,7 +11,6 @@ import me.dordsor21.MirrorMaster.objects.Variables;
 import me.dordsor21.MirrorMaster.util.Commands;
 import me.dordsor21.MirrorMaster.util.Functions;
 import me.dordsor21.MirrorMaster.util.UsersManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -23,18 +22,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MirrorMaster extends JavaPlugin implements Listener {
 
-    private static boolean p2;
     private static MirrorMaster instance;
-
-    public static boolean P2() {
-        return p2;
-    }
 
     public static MirrorMaster get() {
         return instance;
@@ -275,9 +267,6 @@ public class MirrorMaster extends JavaPlugin implements Listener {
 
         instance = this;
 
-        PluginManager manager = Bukkit.getServer().getPluginManager();
-        final Plugin plotsquared = manager.getPlugin("PlotSquared");
-        p2 = !(plotsquared != null && !plotsquared.isEnabled());
     }
 
     private void CheckBlock(BlockBreakEvent event) {

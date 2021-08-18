@@ -1,12 +1,5 @@
 package me.dordsor21.MirrorMaster.util;
 
-import com.github.intellectualsites.plotsquared.bukkit.util.BukkitUtil;
-import com.github.intellectualsites.plotsquared.plot.config.C;
-import com.github.intellectualsites.plotsquared.plot.config.Settings;
-import com.github.intellectualsites.plotsquared.plot.flag.Flags;
-import com.github.intellectualsites.plotsquared.plot.object.Plot;
-import com.github.intellectualsites.plotsquared.plot.object.PlotPlayer;
-import com.github.intellectualsites.plotsquared.plot.util.Permissions;
 import me.dordsor21.MirrorMaster.MirrorMaster;
 import me.dordsor21.MirrorMaster.mirrors.Mirroring;
 import me.dordsor21.MirrorMaster.objects.AdjacentBlock;
@@ -62,7 +55,6 @@ public class Functions {
     public static void PlaceBlock(int xDif, int yDif, int zDif, User user) {
         Bukkit.getScheduler().runTask(MirrorMaster.get(), () -> {
             Location l = new Location(user.player.getWorld(), user.mirrorPoint.getX() + xDif, yDif, user.mirrorPoint.getZ() + zDif);
-            if (!p2CheckPlace(l, user.player)) return;
             l.getBlock().setType(user.variables.materialCopy, false);
             l.getBlock().setBlockData(user.variables.dataCopy, false);
         });
@@ -71,7 +63,6 @@ public class Functions {
     public static void PlaceBlock(int xDif, int yDif, int zDif, BlockData data, User user) {
         Bukkit.getScheduler().runTask(MirrorMaster.get(), () -> {
             Location l = new Location(user.player.getWorld(), user.mirrorPoint.getX() + xDif, yDif, user.mirrorPoint.getZ() + zDif);
-            if (!p2CheckPlace(l, user.player)) return;
             l.getBlock().setType(user.variables.materialCopy, false);
             l.getBlock().setBlockData(data, false);
         });
@@ -79,7 +70,6 @@ public class Functions {
 
     public static void PlaceBlock(Block b, BlockData data, Material mat, User user) {
         Bukkit.getScheduler().runTask(MirrorMaster.get(), () -> {
-            if (!p2CheckPlace(b.getLocation(), user.player)) return;
             b.setType(mat, true);
             b.setBlockData(data, true);
         });
@@ -88,7 +78,6 @@ public class Functions {
     public static void PlaceBlockRelative(int xDif, int yDif, int zDif, BlockData data, Material mat, User user, BlockFace bf) {
         Bukkit.getScheduler().runTask(MirrorMaster.get(), () -> {
             Location l = new Location(user.player.getWorld(), user.mirrorPoint.getX() + xDif, yDif, user.mirrorPoint.getZ() + zDif);
-            if (!p2CheckPlace(l, user.player)) return;
             l.getBlock().getRelative(bf).setType(mat, false);
             l.getBlock().getRelative(bf).setBlockData(data, false);
         });
@@ -97,45 +86,8 @@ public class Functions {
     public static void RemoveBlock(int xDif, int yDif, int zDif, User user) {
         Bukkit.getScheduler().runTask(MirrorMaster.get(), () -> {
             Location l = new Location(user.player.getWorld(), user.mirrorPoint.getX() + xDif, yDif, user.mirrorPoint.getZ() + zDif);
-            if (!p2CheckRemove(l, user.player)) return;
             l.getBlock().setType(Material.AIR);
         });
-    }
-
-    private static boolean p2CheckRemove(Location l, Player pl) {
-        if (MirrorMaster.P2()) {
-            Plot p = BukkitUtil.getPlot(l);
-            PlotPlayer pp = PlotPlayer.wrap(pl);
-            if (p != null) {
-                if (!p.hasOwner())
-                    return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_DESTROY_UNOWNED);
-                if (Settings.Done.RESTRICT_BUILDING && p.getFlags().containsKey(Flags.DONE))
-                    return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_DESTROY_OTHER);
-                if (!p.isAdded(pp.getUUID()))
-                    return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_DESTROY_OTHER);
-            } else {
-                return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_DESTROY_ROAD);
-            }
-        }
-        return true;
-    }
-
-    private static boolean p2CheckPlace(Location l, Player pl) {
-        if (MirrorMaster.P2()) {
-            Plot p = BukkitUtil.getPlot(l);
-            PlotPlayer pp = PlotPlayer.wrap(pl);
-            if (p != null) {
-                if (!p.hasOwner())
-                    return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_BUILD_UNOWNED);
-                if (Settings.Done.RESTRICT_BUILDING && p.getFlags().containsKey(Flags.DONE))
-                    return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_BUILD_OTHER);
-                if (!p.isAdded(pp.getUUID()))
-                    return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_BUILD_OTHER);
-            } else {
-                return Permissions.hasPermission(pp, C.PERMISSION_ADMIN_BUILD_ROAD);
-            }
-        }
-        return true;
     }
 
     public static void Mirror(User user) {
