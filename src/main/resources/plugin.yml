@@ -1,7 +1,7 @@
 name: MirrorMaster
 main: me.dordsor21.MirrorMaster.MirrorMaster
 version: 1
-api-version: 1.17.1
+api-version: 1.17
 commands:
   mm:
     description: Main command for MirrorMaster.
